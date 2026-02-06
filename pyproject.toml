@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfyui-auto-size"
+version = "0.1.0"
+description = "ComfyUI plugin providing auto-sized image and latent nodes with model-aligned resolutions."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "jluo-github" },
+]
+dependencies = [
+  "torch>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jluo-github/comfyui-auto-size"
+Repository = "https://github.com/jluo-github/comfyui-auto-size"
+Issues = "https://github.com/jluo-github/comfyui-auto-size/issues"
+
