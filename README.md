@@ -1,17 +1,17 @@
 # ComfyUI Auto Size Plugin
 
-A **Pure Python** suite of nodes for ComfyUI that automates resolution handling. It allows you to "set and forget" your image dimensions, ensuring they are always aligned with your target model's requirements (e.g., multiples of 32 for Flux, 28 for Qwen, etc.).
-
 [![GitHub](https://img.shields.io/github/license/jluo-github/comfyui-auto-size)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/jluo-github/comfyui-auto-size)](https://github.com/jluo-github/comfyui-auto-size)
 
+A powerful ComfyUI extension for handling image resolutions. It provides smart, model-aware resolution presets and robust resizing tools, designed for "engineering-grade" automation.
+
 ## 🌟 Features
 
+*   **Dynamic Dropdowns**: The `size` dropdown smartly filters to show only relevant presets for your selected `model` (e.g., selecting "Flux" hides "Qwen" sizes).
 *   **Model-Aware Resolution**: Automatically snaps resolutions to specific multiples required by different architectures:
     *   **Flux / Z-Image / Illustrious**: Multiples of 32
     *   **Qwen-Image**: Multiples of 28
-*   **Smart Presets**: Curated lists of popular aspect ratios (`1:1`, `16:9`, `21:9`) and "Favourite" sizes.
-*   **Pure Python**: Zero JavaScript distractions. No browser caching issues, no complex build steps.
+*   **Smart Custom Logic**: Seamlessly switch between presets and custom sizes without fighting the UI.
 *   **Robust Resizing**: Includes an advanced `AutoSize` node for images/masks with multiple modes:
     *   `Center Crop` / `Edge Crop`
     *   `Scale to Fit` (Letterboxing)
@@ -27,14 +27,10 @@ Generates an empty latent tensor for starting a workflow.
 *   **Inputs**:
     *   `model`: Select standard (Flux, Qwen, etc.) or specific architectures.
     *   `size`: Choose a preset (e.g., `Flux - 16:9`) or `Full Custom`.
-    *   `custom_longer_size`: (Only used in Full Custom) Target pixel size for the longer side.
-    *   `custom_ratio`: (Only used in Full Custom) Target aspect ratio.
+    *   `custom_longer_size`: Target pixel size for the longer side. **Set to 0 to use the `size` dropdown.**
+    *   `custom_ratio`: Target aspect ratio (used only when `custom_longer_size > 0`).
     *   `batch_size`: Number of latents to generate.
-*   **Outputs**:
-    *   `latent`: The requested empty latent.
-    *   `width`: Final pixel width.
-    *   `height`: Final pixel height.
-    *   `size`: String representation (e.g., `"1024x1024"`).
+*   **Outputs**: `latent`, `width`, `height`, `size` (string).
 
 ### 2. Auto Size (Image/Mask)
 **Category**: `image/AutoSize`
@@ -46,7 +42,7 @@ Resizes an existing image and/or mask to target dimensions. Perfect for image-to
     *   `scale_method`: Interpolation (Lanczos, Bicubic, Nearest, etc.).
     *   `image` (Optional): Input image to resize.
     *   `mask` (Optional): Input mask to resize.
-*   **Outputs**: Resized image, resized mask, and dimension info.
+*   **Outputs**: Resized `image`, resized `mask`, and dimension info.
 
 ## 🛠️ Installation
 
@@ -59,29 +55,27 @@ Resizes an existing image and/or mask to target dimensions. Perfect for image-to
     git clone https://github.com/jluo-github/comfyui-auto-size.git
     ```
 3.  Restart ComfyUI.
+    *   *Note: If the dynamic dropdowns don't appear immediately, try reloading the browser page.*
 
 ## ⚙️ How It Works (The Logic)
 
-The node follows a strict priority system to determine resolution:
+The nodes use a **Priority System** to determine the final resolution:
 
-1.  **Preset Mode**: If you select a preset in the `size` dropdown (e.g., `Flux - 16:9`), the node **strictly uses that preset's resolution**.
-    *   *The `custom_longer_size` and `custom_ratio` widgets are IGNORED in this mode.*
-2.  **Custom Mode**: If you select `Full Custom (Use Inputs Below)`, the node calculates resolution based on your manual inputs:
-    *   It takes your `custom_longer_size`.
-    *   It applies the `custom_ratio`.
-    *   It aligns the result to the `model`'s required multiple (e.g. rounding to the nearest 32 pixels).
+1.  **Custom Override (`custom_longer_size > 0`)**:
+    *   If you set `custom_longer_size` to any value greater than 0, the node **ignores the Size dropdown**.
+    *   It calculates the resolution using `custom_longer_size` + `custom_ratio`.
+    *   It strictly aligns the result to the selected `model`'s required multiple (e.g., rounding to nearest 32px or 28px).
 
+2.  **Preset Mode (`custom_longer_size = 0`)**:
+    *   If `custom_longer_size` is 0 (default), the node uses the resolution from the **Size** dropdown (e.g., `Flux - 16:9`).
 
 ## 💻 Development
 
-The project is structured for maintainability:
+The project is structured for maintainability and pure Python logic where possible.
 
-*   `nodes/`: Contains the ComfyUI node class definitions.
-    *   `auto_size.py`: Image resizing node.
-    *   `auto_size_latent.py`: Latent generation node.
-*   `utils/`: Core logic decoupled from ComfyUI.
-    *   `presets.py`: Resolution dictionaries and calculation math.
-    *   `resize.py`: PyTorch tensor resizing and cropping logic.
+*   `nodes/`: ComfyUI node definitions.
+*   `utils/`: Core logic (presets, math, resizing) decoupled from ComfyUI.
+*   `js/`: Frontend extensions for dynamic UI behavior.
 
 ### Running Tests
 To verify the math and resize logic:

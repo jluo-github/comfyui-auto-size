@@ -39,7 +39,7 @@ class AutoSizeLatent:
     """
 
     def __init__(self) -> None:
-        return
+        pass
 
     @classmethod
     def INPUT_TYPES(cls) -> Dict[str, Mapping[str, tuple]]:
@@ -49,7 +49,7 @@ class AutoSizeLatent:
                 "size": (SIZE_LIST, {"default": SIZE_LIST[0]}),
                 "custom_longer_size": (
                     "INT",
-                    {"default": 1024, "min": 256, "max": 8192, "step": 16},
+                    {"default": 0, "min": 0, "max": 8192, "step": 16},
                 ),
                 "custom_ratio": (RATIO_LIST, {"default": "1:1"}),
                 "batch_size": ("INT", {"default": 1, "min": 1, "max": 4096}),

@@ -37,9 +37,9 @@ ILLUSTRIOUS_SIZES: Dict[str, Tuple[int, int]] = {
     "1:1": (1024, 1024),
     "9:16": (768, 1344),
     "16:9": (1344, 768),
-    "13:19": (832, 1216),  # Inferred aspect based on resolution
+    "13:19": (832, 1216),
     "19:13": (1216, 832),
-    "9:7": (1152, 896),  # Matches Flux/SDXL approx
+    "9:7": (1152, 896),
     "7:9": (896, 1152),
     "12:5": (1536, 640),
     "5:12": (640, 1536),
@@ -48,41 +48,41 @@ ILLUSTRIOUS_SIZES: Dict[str, Tuple[int, int]] = {
 
 Z_IMAGE_SIZES: Dict[str, Tuple[int, int]] = {
     "1:1": (1280, 1280),
-    "16:9": (1600, 896),
     "9:16": (896, 1600),
-    "9:7": (1440, 1120),
+    "16:9": (1600, 896),
     "7:9": (1120, 1440),
-    "4:3": (1472, 1104),
+    "9:7": (1440, 1120),
     "3:4": (1104, 1472),
-    "3:2": (1536, 1024),
+    "4:3": (1472, 1104),
     "2:3": (1024, 1536),
-    "21:9": (1680, 720),
+    "3:2": (1536, 1024),
     "9:21": (720, 1680),
+    "21:9": (1680, 720),
 }
 
 FLUX_SIZES: Dict[str, Tuple[int, int]] = {
     "1:1": (1024, 1024),
-    "16:9": (1280, 720),
     "9:16": (720, 1280),
-    "9:7": (1152, 896),
+    "16:9": (1280, 720),
     "7:9": (896, 1152),
-    "4:3": (1152, 864),
+    "9:7": (1152, 896),
     "3:4": (864, 1152),
-    "3:2": (1248, 832),
+    "4:3": (1152, 864),
     "2:3": (832, 1248),
-    "21:9": (1344, 576),
+    "3:2": (1248, 832),
     "9:21": (576, 1344),
+    "21:9": (1344, 576),
 }
 
 
 FAV_SIZES: Dict[str, Tuple[int, int]] = {
     "1:1": (1536, 1536),
-    "9:7ish": (1728, 1344),
-    "7:9ish": (1344, 1728),
-    "3:2ish": (1824, 1248),
-    "2:3ish": (1248, 1824),
-    "16:9ish": (2016, 1152),
-    "9:16ish": (1152, 2016),
+    "9:7": (1728, 1344),
+    "7:9": (1344, 1728),
+    "3:2": (1824, 1248),
+    "2:3": (1248, 1824),
+    "16:9": (2016, 1152),
+    "9:16": (1152, 2016),
 }
 
 # Combine for dropdown (labelled with size)
@@ -197,36 +197,39 @@ def resolve_resolution(
         (width, height) in pixels, snapped to the model's required multiple.
     """
 
-    # 1. Fixed "Size" selection
+    # 1. Custom calculation (Primary if explicit value provided)
+    if longer_side > 0:
+        target_ratio = RATIOS.get(custom_ratio, 1.0)
+        multiple = MODEL_SPECS.get(model, 32)
+
+        if target_ratio > 1.0:
+            width = float(longer_side)
+            height = width / target_ratio
+        elif target_ratio < 1.0:
+            height = float(longer_side)
+            width = height * target_ratio
+        else:
+            width = float(longer_side)
+            height = float(longer_side)
+
+        final_width = round(width / multiple) * multiple
+        final_height = round(height / multiple) * multiple
+
+        final_width = max(final_width, multiple)
+        final_height = max(final_height, multiple)
+
+        return int(final_width), int(final_height)
+
+    # 2. Fixed "Size" selection (Fallback)
+    # data format example: "Qwen - 1:1 (1328x1328)"
     if size_selection and "Full Custom" not in size_selection:
-        # data format example: "Qwen - 1:1 (1328x1328)"
         try:
             # Extract "1328x1328" from inside parens
             dim_part = size_selection.rsplit("(", 1)[-1].strip(")")
             w_str, h_str = dim_part.split("x")
             return int(w_str), int(h_str)
         except (ValueError, IndexError):
-            # Fallback to default if parsing fails
-            return 1024, 1024
+            pass
 
-    # 2. Custom calculation
-    target_ratio = RATIOS.get(custom_ratio, 1.0)
-    multiple = MODEL_SPECS.get(model, 32)
-
-    if target_ratio > 1.0:
-        width = float(longer_side)
-        height = width / target_ratio
-    elif target_ratio < 1.0:
-        height = float(longer_side)
-        width = height * target_ratio
-    else:
-        width = float(longer_side)
-        height = float(longer_side)
-
-    final_width = round(width / multiple) * multiple
-    final_height = round(height / multiple) * multiple
-
-    final_width = max(final_width, multiple)
-    final_height = max(final_height, multiple)
-
-    return int(final_width), int(final_height)
+    # 3. Default Fallback
+    return 1024, 1024
