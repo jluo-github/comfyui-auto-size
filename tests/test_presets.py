@@ -1,5 +1,5 @@
 import unittest
-from utils.presets import resolve_resolution, MODEL_SPECS
+from utils.presets import resolve_resolution
 
 
 class TestPresets(unittest.TestCase):

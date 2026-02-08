@@ -53,9 +53,13 @@ jobs:
           pip install torch --index-url https://download.pytorch.org/whl/cpu
 
       - name: Validate Python syntax
-        run: python -m py_compile __init__.py nodes.py presets.py resize.py
+        run: |
+          python -m py_compile __init__.py
+          python -m py_compile nodes/__init__.py nodes/auto_size.py nodes/auto_size_latent.py
+          python -m py_compile utils/presets.py utils/resize.py
 
       - name: Test imports
         run: |
-          python -c "import presets; print('✓ presets.py imports successfully')"
-          python -c "import resize; print('✓ resize.py imports successfully')"
+          python -c "from utils import presets; print('✓ presets.py imports successfully')"
+          python -c "from utils import resize; print('✓ resize.py imports successfully')"
+
