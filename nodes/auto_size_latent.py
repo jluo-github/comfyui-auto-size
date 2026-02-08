@@ -6,7 +6,6 @@ This implementation is pure Python and has no JavaScript dependency.
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, MutableMapping
 
 import torch
 
@@ -28,9 +27,8 @@ except ImportError:
     )
 
 
-# ============================================================================
-# Node 2: AutoSizeLatent
-# ============================================================================
+# Latent space is 1/8 of pixel dimensions
+LATENT_DIVISOR = 8
 
 
 class AutoSizeLatent:
@@ -42,7 +40,7 @@ class AutoSizeLatent:
         pass
 
     @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Mapping[str, tuple]]:
+    def INPUT_TYPES(cls) -> dict[str, dict[str, tuple]]:
         return {
             "required": {
                 "model": (MODEL_LIST, {"default": DEFAULT_MODEL}),
@@ -69,7 +67,7 @@ class AutoSizeLatent:
         custom_longer_size: int,
         custom_ratio: str,
         batch_size: int = 1,
-    ) -> MutableMapping[str, object]:
+    ) -> dict[str, object]:
         """
         Generate an empty latent tensor for downstream processing.
 
@@ -91,9 +89,8 @@ class AutoSizeLatent:
 
         res_string = f"{target_width}x{target_height}"
 
-        # Latent space is 1/8 of pixel dimensions
-        latent_width = target_width // 8
-        latent_height = target_height // 8
+        latent_width = target_width // LATENT_DIVISOR
+        latent_height = target_height // LATENT_DIVISOR
 
         latent = torch.zeros([batch_size, 4, latent_height, latent_width])
 

@@ -4,13 +4,12 @@ Size preset definitions and calculation logic for the ComfyUI Auto Size plugin.
 
 from __future__ import annotations
 
-from typing import Dict, List, Tuple
 
 # ============================================================================
 # Model Specifications
 # ============================================================================
 
-MODEL_SPECS: Dict[str, int] = {
+MODEL_SPECS: dict[str, int] = {
     "qwen-image": 28,
     "illustrious": 32,
     "z-image": 32,
@@ -23,7 +22,7 @@ DEFAULT_MODEL: str = "qwen-image"
 # Fixed Size Presets
 # ============================================================================
 
-QWEN_SIZES: Dict[str, Tuple[int, int]] = {
+QWEN_SIZES: dict[str, tuple[int, int]] = {
     "1:1": (1328, 1328),
     "9:16": (928, 1664),
     "16:9": (1664, 928),
@@ -33,7 +32,7 @@ QWEN_SIZES: Dict[str, Tuple[int, int]] = {
     "3:2": (1584, 1056),
 }
 
-ILLUSTRIOUS_SIZES: Dict[str, Tuple[int, int]] = {
+ILLUSTRIOUS_SIZES: dict[str, tuple[int, int]] = {
     "1:1": (1024, 1024),
     "9:16": (768, 1344),
     "16:9": (1344, 768),
@@ -46,7 +45,7 @@ ILLUSTRIOUS_SIZES: Dict[str, Tuple[int, int]] = {
     "2:3": (1024, 1536),
 }
 
-Z_IMAGE_SIZES: Dict[str, Tuple[int, int]] = {
+Z_IMAGE_SIZES: dict[str, tuple[int, int]] = {
     "1:1": (1280, 1280),
     "9:16": (896, 1600),
     "16:9": (1600, 896),
@@ -60,7 +59,7 @@ Z_IMAGE_SIZES: Dict[str, Tuple[int, int]] = {
     "21:9": (1680, 720),
 }
 
-FLUX_SIZES: Dict[str, Tuple[int, int]] = {
+FLUX_SIZES: dict[str, tuple[int, int]] = {
     "1:1": (1024, 1024),
     "9:16": (720, 1280),
     "16:9": (1280, 720),
@@ -75,7 +74,7 @@ FLUX_SIZES: Dict[str, Tuple[int, int]] = {
 }
 
 
-FAV_SIZES: Dict[str, Tuple[int, int]] = {
+FAV_SIZES: dict[str, tuple[int, int]] = {
     "1:1": (1536, 1536),
     "9:7": (1728, 1344),
     "7:9": (1344, 1728),
@@ -86,10 +85,10 @@ FAV_SIZES: Dict[str, Tuple[int, int]] = {
 }
 
 # Combine for dropdown (labelled with size)
-SIZE_LIST: List[str] = ["Full Custom (Use Inputs Below)"]
+SIZE_LIST: list[str] = ["Full Custom (Use Inputs Below)"]
 
 
-def add_to_list(prefix: str, sizes: Dict[str, Tuple[int, int]]) -> None:
+def add_to_list(prefix: str, sizes: dict[str, tuple[int, int]]) -> None:
     """
     Populate the `SIZE_LIST` with human‑readable entries for a given size map.
     """
@@ -108,7 +107,7 @@ add_to_list("Fav", FAV_SIZES)
 # Ratios
 # ============================================================================
 
-RATIOS: Dict[str, float] = {
+RATIOS: dict[str, float] = {
     "1:1": 1.0,
     "9:16": 9 / 16,
     "16:9": 16 / 9,
@@ -130,8 +129,8 @@ RATIOS: Dict[str, float] = {
 # Lists for UI
 # ============================================================================
 
-MODEL_LIST: List[str] = list(MODEL_SPECS.keys())
-RATIO_LIST: List[str] = [
+MODEL_LIST: list[str] = list(MODEL_SPECS.keys())
+RATIO_LIST: list[str] = [
     "1:1",
     "1:2",
     "2:1",
@@ -153,7 +152,7 @@ RATIO_LIST: List[str] = [
 # Method Constants
 # ============================================================================
 
-CROP_METHODS: List[str] = [
+CROP_METHODS: list[str] = [
     "Center Crop",
     "Top-Left Crop",
     "Bottom-Right Crop",
@@ -161,9 +160,9 @@ CROP_METHODS: List[str] = [
     "Stretch to Fill",
 ]
 
-SCALE_METHODS: List[str] = ["lanczos", "bilinear", "bicubic", "nearest"]
+SCALE_METHODS: list[str] = ["lanczos", "bilinear", "bicubic", "nearest"]
 
-INTERPOLATION_MODES: Dict[str, str] = {
+INTERPOLATION_MODES: dict[str, str] = {
     "lanczos": "bicubic",
     "bilinear": "bilinear",
     "bicubic": "bicubic",
@@ -180,7 +179,7 @@ def resolve_resolution(
     longer_side: int,
     custom_ratio: str,
     model: str,
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     """
     Resolve final resolution based on priority:
 

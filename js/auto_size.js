@@ -18,24 +18,22 @@ app.registerExtension({
 						if (option.startsWith("Full Custom") || option.startsWith("Fav")) {
 							return true;
 						}
-						// Keep options that start with the selected model name (case-insensitive check if needed, but presets are Case Sensitive)
-                        // The presets use specific capitalization: "Qwen", "Flux", "Z-Image", "Illustrious"
-                        // The model values are: "qwen-image", "flux", "z-image", "illustrious"
-                        
-                        // Map model values to prefix matching
-                        let prefix = "";
-                        if (model === "qwen-image") prefix = "Qwen";
-                        else if (model === "z-image") prefix = "Z-Image";
-                        else if (model === "flux") prefix = "Flux";
-                        else if (model === "illustrious") prefix = "Illustrious";
-                        
-                        return option.startsWith(prefix);
+						// Map model values to prefix matching
+						// Model values: "qwen-image", "flux", "z-image", "illustrious"
+						// Preset prefixes: "Qwen", "Flux", "Z-Image", "Illustrious"
+						let prefix = "";
+						if (model === "qwen-image") prefix = "Qwen";
+						else if (model === "z-image") prefix = "Z-Image";
+						else if (model === "flux") prefix = "Flux";
+						else if (model === "illustrious") prefix = "Illustrious";
+
+						return option.startsWith(prefix);
 					});
 
-                    // Update the widget options
+					// Update the widget options
 					sizeWidget.options.values = filteredSizes;
 
-                    // If current value is invalid, reset to first available (usually Full Custom or first preset)
+					// If current value is invalid, reset to first available
 					if (!filteredSizes.includes(sizeWidget.value)) {
 						sizeWidget.value = filteredSizes[0];
 					}

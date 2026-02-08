@@ -6,7 +6,6 @@ This implementation is pure Python and has no JavaScript dependency.
 
 from __future__ import annotations
 
-from typing import Dict, Mapping, MutableMapping
 
 import torch
 
@@ -35,11 +34,6 @@ except ImportError:
     from utils.resize import resize_image, resize_mask
 
 
-# ============================================================================
-# Node 1: AutoSize
-# ============================================================================
-
-
 class AutoSize:
     """
     ComfyUI node that resizes an optional image and mask to a model‑aligned resolution.
@@ -49,7 +43,7 @@ class AutoSize:
         pass
 
     @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Mapping[str, tuple]]:
+    def INPUT_TYPES(cls) -> dict[str, dict[str, tuple]]:
         return {
             "required": {
                 "model": (MODEL_LIST, {"default": DEFAULT_MODEL}),
@@ -85,7 +79,7 @@ class AutoSize:
         scale_method: str,
         image: torch.Tensor | None = None,
         mask: torch.Tensor | None = None,
-    ) -> MutableMapping[str, object]:
+    ) -> dict[str, object]:
         """
         Process the image and mask resizing.
 

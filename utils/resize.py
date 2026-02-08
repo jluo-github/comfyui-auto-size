@@ -6,7 +6,6 @@ Provides unified resize logic with support for various crop and scale methods.
 
 from __future__ import annotations
 
-from typing import Tuple
 
 import torch
 import torch.nn.functional as F
@@ -23,7 +22,7 @@ except ImportError:
 
 def _calculate_scaled_dimensions(
     src_w: int, src_h: int, target_w: int, target_h: int, cover: bool
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     """
     Calculate new dimensions for scaling.
 
@@ -57,7 +56,7 @@ def _calculate_scaled_dimensions(
 
 def _get_crop_offset(
     crop_method: str, new_w: int, new_h: int, target_w: int, target_h: int
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     """
     Calculate crop offset based on crop method.
 
