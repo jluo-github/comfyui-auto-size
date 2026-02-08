@@ -9,8 +9,8 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "AutoSize": "Auto Size (Python)",
-    "AutoSizeLatent": "Auto Size Latent (Python)",
+    "AutoSize": "📐 Auto Size",
+    "AutoSizeLatent": "📐 Auto Size Latent",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

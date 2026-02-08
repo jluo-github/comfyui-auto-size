@@ -9,9 +9,9 @@ A ComfyUI custom node for handling image resolutions with smart, model-aware pre
 
 | Model | Use Case | Resolution Multiple | Source |
 |-------|----------|---------------------|--------|
-| **Qwen-Image** | Text-to-image | 28px | [Official docs](https://qwen.ai/) |
-| **Z-Image** | Text-to-image | 32px | [Official docs](https://z.ai/) |
-| **Flux2-Klein** | Text-to-image | 32px | Similar to Z-Image/Illustrious |
+| **Qwen-Image** | Text-image-to-image | 28px | [Official docs](https://qwen.ai/) |
+| **Z-Image** | Text-image-to-image | 32px | [Official docs](https://z.ai/) |
+| **Flux2-Klein/Flux** | Text-image-to-image | 32px | Similar to Z-Image/Illustrious |
 | **Illustrious** | Anime | 32px | Community standard |
 
 ## ✨ Features
