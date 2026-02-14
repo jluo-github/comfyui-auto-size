@@ -1,5 +1,12 @@
 import { app } from "../../scripts/app.js";
 
+const PREFIX_MAP = {
+	"qwen-image": "Qwen",
+	"illustrious": "Illustrious",
+	"z-image": "Z-Image",
+	"flux": "Flux",
+};
+
 app.registerExtension({
 	name: "ComfyUI.AutoSizeLatent",
 	async nodeCreated(node, app) {
@@ -12,22 +19,23 @@ app.registerExtension({
 				const originalSizeOptions = [...sizeWidget.options.values];
 
 				const updateSizeOptions = () => {
-					const model = modelWidget.value;
+					const model = modelWidget.value ? modelWidget.value.trim() : "";
+					const prefix = PREFIX_MAP[model];
+
 					let filteredSizes = originalSizeOptions.filter((option) => {
 						// Always keep "Full Custom" and "Fav"
 						if (option.startsWith("Full Custom") || option.startsWith("Fav")) {
 							return true;
 						}
-						// Map model values to prefix matching
-						// Model values: "qwen-image", "flux", "z-image", "illustrious"
-						// Preset prefixes: "Qwen", "Flux", "Z-Image", "Illustrious"
-						let prefix = "";
-						if (model === "qwen-image") prefix = "Qwen";
-						else if (model === "z-image") prefix = "Z-Image";
-						else if (model === "flux") prefix = "Flux";
-						else if (model === "illustrious") prefix = "Illustrious";
 
-						return option.startsWith(prefix);
+						if (prefix) {
+							return option.startsWith(prefix);
+						}
+
+						// If no valid prefix found (unknown model), default to showing everything
+						// or maybe just "Full Custom" + "Fav"?
+						// Current behavior: Show everything if no match found (safest fallthrough)
+						return true;
 					});
 
 					// Update the widget options
@@ -42,6 +50,8 @@ app.registerExtension({
 				// Add callback to model widget
 				const originalCallback = modelWidget.callback;
 				modelWidget.callback = function () {
+					// ComfyUI widgets usually update .value before callback, but just in case
+					// we can check 'this.value' or 'modelWidget.value'.
 					updateSizeOptions();
 					if (originalCallback) {
 						originalCallback.apply(this, arguments);
