@@ -97,9 +97,9 @@ def add_to_list(prefix: str, sizes: dict[str, tuple[int, int]]) -> None:
 
 
 add_to_list("Qwen", QWEN_SIZES)
+add_to_list("Illustrious", ILLUSTRIOUS_SIZES)
 add_to_list("Z-Image", Z_IMAGE_SIZES)
 add_to_list("Flux", FLUX_SIZES)
-add_to_list("Illustrious", ILLUSTRIOUS_SIZES)
 add_to_list("Fav", FAV_SIZES)
 
 
