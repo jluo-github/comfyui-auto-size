@@ -50,16 +50,25 @@ app.registerExtension({
 				// Add callback to model widget
 				const originalCallback = modelWidget.callback;
 				modelWidget.callback = function () {
-					// ComfyUI widgets usually update .value before callback, but just in case
-					// we can check 'this.value' or 'modelWidget.value'.
 					updateSizeOptions();
 					if (originalCallback) {
 						originalCallback.apply(this, arguments);
 					}
 				};
 
-				// Initial update
+				// Hook into configure() — fires AFTER saved widget values are restored
+				const originalConfigure = node.configure;
+				node.configure = function (info) {
+					if (originalConfigure) {
+						originalConfigure.apply(this, arguments);
+					}
+					// Values are now restored from the saved workflow, re-sync dropdown
+					updateSizeOptions();
+				};
+
+				// Initial update + deferred safety net for edge cases
 				updateSizeOptions();
+				requestAnimationFrame(() => updateSizeOptions());
 			}
 		}
 	},
