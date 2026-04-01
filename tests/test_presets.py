@@ -3,7 +3,6 @@ from utils.presets import resolve_resolution
 
 
 class TestPresets(unittest.TestCase):
-
     def test_preset_parsing(self):
         # "Qwen - 1:1 (1024x1024)"
         w, h = resolve_resolution("Qwen - 1:1 (1024x1024)", 0, "1:1", "qwen-image")

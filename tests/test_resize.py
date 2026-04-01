@@ -4,7 +4,6 @@ from utils.resize import resize_image, resize_mask
 
 
 class TestResize(unittest.TestCase):
-
     def setUp(self):
         # Create a simple 100x100 red image
         self.image = torch.zeros((1, 100, 100, 3))
