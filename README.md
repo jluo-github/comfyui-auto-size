@@ -1,7 +1,9 @@
 # ComfyUI Auto Size
 
-[![GitHub](https://img.shields.io/github/license/jluo-github/comfyui-auto-size)](LICENSE)
-[![GitHub](https://img.shields.io/github/stars/jluo-github/comfyui-auto-size)](https://github.com/jluo-github/comfyui-auto-size)
+![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)
+![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests](https://github.com/jluo-github/comfyui-auto-size/actions/workflows/ci.yml/badge.svg)](https://github.com/jluo-github/comfyui-auto-size/actions/workflows/ci.yml)
 
 A ComfyUI custom node for handling image resolutions with smart, model-aware presets for **2026 diffusion models**.
 
